@@ -1,4 +1,16 @@
+
 import { Users, UserRound, CalendarCheck, TrendingUp } from 'lucide-react';
+import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
+
+const admissionData = [
+  { name: 'Mon', patients: 40 },
+  { name: 'Tue', patients: 60 },
+  { name: 'Wed', patients: 45 },
+  { name: 'Thu', patients: 80 },
+  { name: 'Fri', patients: 55 },
+  { name: 'Sat', patients: 90 },
+  { name: 'Sun', patients: 75 },
+];
 
 const StatCard = ({ title, value, icon: Icon, trend, colorClass }) => (
   <div className="card fade-in" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -45,20 +57,17 @@ const DashboardView = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
         <div className="card">
           <h3 style={{ marginBottom: '1.5rem' }}>Patient Admissions</h3>
-          {/* Simple CSS Chart */}
-          <div style={{ display: 'flex', alignItems: 'flex-end', height: '200px', gap: '1rem', paddingTop: '1rem' }}>
-            {[40, 60, 45, 80, 55, 90, 75].map((height, i) => (
-              <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                <div style={{ 
-                  width: '100%', 
-                  height: `${height}%`, 
-                  backgroundColor: 'var(--color-primary)', 
-                  borderRadius: '4px',
-                  transition: 'height 1s cubic-bezier(0.4, 0, 0.2, 1)'
-                }}></div>
-                <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]}</span>
-              </div>
-            ))}
+          <div style={{ height: '250px', width: '100%', marginTop: '1rem' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={admissionData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--color-text-muted)' }} dy={10} />
+                <Tooltip 
+                  cursor={{ fill: 'var(--color-surface-hover)' }}
+                  contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: 'var(--shadow-md)', color: 'var(--color-text-main)' }}
+                />
+                <Bar dataKey="patients" fill="var(--color-primary)" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
