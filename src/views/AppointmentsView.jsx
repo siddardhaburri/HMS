@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar as CalendarIcon, Clock, User, ChevronLeft, ChevronRight, Search, Plus, Trash2, X } from 'lucide-react';
 
-const initialAppointments = [
+const defaultAppointments = [
   { id: 'APT-1', time: '09:00 AM', patient: 'Sarah Jenkins', doctor: 'Dr. Gregory House', type: 'Consultation', status: 'Upcoming' },
   { id: 'APT-2', time: '10:30 AM', patient: 'Michael Chen', doctor: 'Dr. Meredith Grey', type: 'Follow-up', status: 'In Progress' },
   { id: 'APT-3', time: '11:15 AM', patient: 'Emma Watson', doctor: 'Dr. Derek Shepherd', type: 'Checkup', status: 'Upcoming' },
@@ -10,7 +10,22 @@ const initialAppointments = [
 ];
 
 const AppointmentsView = ({ showToast }) => {
-  const [appointments, setAppointments] = useState(initialAppointments);
+  const [appointments, setAppointments] = useState(() => {
+    const saved = localStorage.getItem('appointments');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse appointments from local storage");
+      }
+    }
+    return defaultAppointments;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('appointments', JSON.stringify(appointments));
+  }, [appointments]);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [isAdding, setIsAdding] = useState(false);
   
