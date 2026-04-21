@@ -28,6 +28,21 @@ const AppointmentsView = ({ showToast }) => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isAdding, setIsAdding] = useState(false);
+  const [currentDate, setCurrentDate] = useState(() => new Date());
+  
+  const handlePrevDate = () => {
+    const prev = new Date(currentDate);
+    prev.setDate(prev.getDate() - 1);
+    setCurrentDate(prev);
+  };
+
+  const handleNextDate = () => {
+    const next = new Date(currentDate);
+    next.setDate(next.getDate() + 1);
+    setCurrentDate(next);
+  };
+
+  const formattedDate = currentDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   
   const [newApt, setNewApt] = useState({
     time: '',
@@ -72,9 +87,9 @@ const AppointmentsView = ({ showToast }) => {
         </div>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'var(--color-surface)', padding: '0.5rem 1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
-            <button onClick={() => showToast('Previous Date')} style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer' }}><ChevronLeft size={18} /></button>
-            <span style={{ fontWeight: 500, fontSize: '0.9rem' }}>October 24, 2023</span>
-            <button onClick={() => showToast('Next Date')} style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer' }}><ChevronRight size={18} /></button>
+            <button onClick={handlePrevDate} style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer' }}><ChevronLeft size={18} /></button>
+            <span style={{ fontWeight: 500, fontSize: '0.9rem', minWidth: '130px', textAlign: 'center' }}>{formattedDate}</span>
+            <button onClick={handleNextDate} style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer' }}><ChevronRight size={18} /></button>
           </div>
           <button onClick={() => setIsAdding(true)} style={{ padding: '0.6rem 1.25rem', backgroundColor: 'var(--color-primary)', color: 'white', border: 'none', borderRadius: 'var(--radius-md)', fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Plus size={18} /> New Appointment
